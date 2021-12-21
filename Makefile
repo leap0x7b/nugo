@@ -53,7 +53,7 @@ build/go.o: src/main.go
 	llvm-objcopy --globalize-symbol runtime.g0 --globalize-symbol main.main $@ $@
 
 run: build/nugo.elf
-	qemu-system-x86_64 -m 2G -kernel $< -debugcon stdio
+	qemu-system-x86_64 -m 2G -cdrom $(ISO) -serial stdio
 
 clean:
 	$(RM)r build
