@@ -3,12 +3,12 @@ package nugoruntime
 import _ "unsafe"
 
 var (
-	mallocInitFn         = mallocInit
-	algInitFn            = algInit
-	modulesInitFn        = modulesInit
-	typeLinksInitFn      = typeLinksInit
-	itabsInitFn          = itabsInit
-	procResizeFn         = procResize
+	mallocInitFn    = mallocInit
+	algInitFn       = algInit
+	modulesInitFn   = modulesInit
+	typeLinksInitFn = typeLinksInit
+	itabsInitFn     = itabsInit
+	procResizeFn    = procResize
 
 	// A seed for the pseudo-random number generator used by getRandomData
 	prngSeed uint32 = 0xdeadc0de

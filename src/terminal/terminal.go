@@ -1,9 +1,9 @@
 package terminal
- 
+
 import (
-	"unsafe"
 	"fmt"
 	"github.com/leapofazzam123/nugo/src/io"
+	"unsafe"
 )
 
 const (
@@ -24,11 +24,11 @@ const (
 	LightBrown   = 14
 	White        = 15
 )
- 
+
 var Column, Row int
 var Color byte
 var Vram *[25][80][2]byte
- 
+
 func Init() {
 	Vram = (*[25][80][2]byte)(unsafe.Pointer(uintptr(0xB8000)))
 	Color = VgaColorEntry(LightGrey, Black)
@@ -37,15 +37,15 @@ func Init() {
 }
 
 func VgaColorEntry(fg, bg byte) byte {
-	return fg | bg << 4
+	return fg | bg<<4
 }
 
 func EnableCursor(start, end byte) {
 	io.Outb(0x3D4, 0x0A)
-	io.Outb(0x3D5, (io.Inb(0x3D5) & 0xC0) | start)
+	io.Outb(0x3D5, (io.Inb(0x3D5)&0xC0)|start)
 
 	io.Outb(0x3D4, 0x0B)
-	io.Outb(0x3D5, (io.Inb(0x3D5) & 0xE0) | end)
+	io.Outb(0x3D5, (io.Inb(0x3D5)&0xE0)|end)
 }
 
 func DisableCursor() {
@@ -54,12 +54,12 @@ func DisableCursor() {
 }
 
 func SetCursorPosition(x, y int) {
-	var pos uint16 = uint16(y * 80) + uint16(x)
+	var pos uint16 = uint16(y*80) + uint16(x)
 
 	io.Outb(0x3D4, 0x0F)
-	io.Outb(0x3D5, uint8(pos & 0xFF))
+	io.Outb(0x3D5, uint8(pos&0xFF))
 	io.Outb(0x3D4, 0x0E)
-	io.Outb(0x3D5, uint8((pos >> 8) & 0xFF))
+	io.Outb(0x3D5, uint8((pos>>8)&0xFF))
 }
 
 func GetCursorPosition() uint16 {
@@ -75,21 +75,21 @@ func GetCursorPosition() uint16 {
 }
 
 func ScrollUp() {
-    var x, y int
+	var x, y int
 
-    for y = 0; y < 24; y++ {
-        for x = 0; x < 80; x++ {
-            Vram[y][x] = Vram[y + 1][x]
-        }
-    }
+	for y = 0; y < 24; y++ {
+		for x = 0; x < 80; x++ {
+			Vram[y][x] = Vram[y+1][x]
+		}
+	}
 
-    for x = 0; x < 80; x++ {
-        Vram[y][x][0] = 32
-        Vram[y][x][1] = Color
-    }
+	for x = 0; x < 80; x++ {
+		Vram[y][x][0] = 32
+		Vram[y][x][1] = Color
+	}
 
-    Column = 0
-    Row = 24
+	Column = 0
+	Row = 24
 }
 
 func Clear() {
